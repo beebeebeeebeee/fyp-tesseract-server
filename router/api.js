@@ -16,6 +16,11 @@ var upload = require("./function/uploadMulter");
 
 router.post("/", upload.single("file"), async (req, res) => {
   console.log(req.file.path);
+  if (!req.file.path) {
+    res
+      .status(400)
+      .send({ error: "please ensure that the image is on `file` column." });
+  }
   data = await Tesseract.recognize(req.file.path, "eng", {});
   fs.unlinkSync(req.file.path);
   console.log(data.data.text);
